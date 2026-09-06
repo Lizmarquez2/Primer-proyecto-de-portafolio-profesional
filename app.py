@@ -168,7 +168,7 @@ if modulo == "🏠 Home":
     st.title("📊 Teen Mental Health - Análisis Exploratorio de Datos")
 
     st.markdown("""
-    ### Objetivo:
+    ### Objetivo
     Esta aplicación explora, limpia, transforma y visualiza el dataset
     **Teen_Mental_Health_Dataset.csv** con el fin de identificar patrones
     entre hábitos digitales, descanso, actividad física, interacción social
@@ -255,8 +255,6 @@ elif modulo == "🔎 Análisis Exploratorio (EDA)":
     analyzer = DataAnalyzer(df)
     numericas, categoricas = analyzer.clasificar_variables()
 
-    # Quitamos depression_label de las "numéricas" a efectos de gráficos,
-    # ya que en realidad es una etiqueta categórica binaria.
     numericas_analisis = [c for c in numericas if c != "depression_label"]
 
     tabs = st.tabs([
