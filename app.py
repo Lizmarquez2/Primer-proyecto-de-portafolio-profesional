@@ -1,15 +1,3 @@
-"""
-Caso de Estudio N°4 - Teen Mental Health Dataset
-Especialización Python for Analytics (2026)
-Autora: Liz Esthefanny Marquez Panuera
-
-Aplicación interactiva en Streamlit para el Análisis Exploratorio de Datos (EDA)
-del dataset Teen_Mental_Health_Dataset.csv.
-
-IMPORTANTE: Este análisis es exploratorio y educativo. NO constituye un
-diagnóstico clínico ni sustituye la valoración de profesionales de la salud.
-"""
-
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -177,10 +165,10 @@ if "df" not in st.session_state:
 # MÓDULO 1: HOME
 # ====================================================================
 if modulo == "🏠 Home":
-    st.title("📊 Teen Mental Health Dataset - Análisis Exploratorio de Datos")
+    st.title("📊 Teen Mental Health - Análisis Exploratorio de Datos")
 
     st.markdown("""
-    ### Objetivo del análisis
+    ### Objetivo:
     Esta aplicación explora, limpia, transforma y visualiza el dataset
     **Teen_Mental_Health_Dataset.csv** con el fin de identificar patrones
     entre hábitos digitales, descanso, actividad física, interacción social
@@ -193,7 +181,7 @@ if modulo == "🏠 Home":
     with col1:
         st.subheader("👩‍🎓 Datos de la autora")
         st.markdown("""
-        - **Nombre:** Liz Esthefanny Marquez Panuera
+        - **Nombre completo:** Liz Esthefanny Marquez Panuera
         - **Curso / Especialización:** Python for Analytics
         - **Año:** 2026
         """)
