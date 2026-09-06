@@ -1,0 +1,8 @@
+# Tema pastel tenue para la app Teen Mental Health - EDA
+# Colores inspirados en calma/bienestar: lavanda, celeste y menta suaves.
+[theme]
+primaryColor = "#B39DDB"            # lavanda suave -> color de slider, radio, tabs activas, botones
+backgroundColor = "#FDFBF9"         # fondo principal, blanco cálido
+secondaryBackgroundColor = "#F1ECFA" # fondo del sidebar y widgets, lavanda muy claro
+textColor = "#4A4460"               # texto principal, gris-morado suave (no negro puro)
+font = "sans serif"
