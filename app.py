@@ -13,7 +13,126 @@ st.set_page_config(
     layout="wide",
 )
 
-sns.set_style("whitegrid")
+# ------------------------------------------------------------------
+# Paleta pastel tenue del proyecto
+# Colores inspirados en calma / bienestar adolescente: lavanda, celeste,
+# menta y durazno suaves. Se usan tanto en el CSS de la app como en los
+# gráficos de Matplotlib/Seaborn para mantener coherencia visual.
+# ------------------------------------------------------------------
+COLOR_FONDO = "#FDFBF9"
+COLOR_FONDO_GRAFICO = "#FFFDF9"
+COLOR_TEXTO = "#4A4460"
+COLOR_GRID = "#EDE6F5"
+COLOR_BORDE = "#D8CFE8"
+COLOR_ACENTO = "#B39DDB"       # lavanda (acento principal)
+
+# Paleta cualitativa pastel para variables categóricas con varias clases
+PALETA_PASTEL = ["#A8D8EA", "#FFC2D1", "#B5EAD7", "#FFDAC1", "#C9C2E8", "#FFF3B0"]
+
+# Paleta específica para depression_label (binaria): celeste = 0, rosa = 1.
+# Se eligieron tonos suaves y no alarmantes, evitando rojos/semáforo.
+PALETA_DEPRESION = {0: "#A8D8EA", 1: "#FFC2D1"}
+
+
+def paleta_pastel(n: int) -> list:
+    """Devuelve una lista de n colores pastel, repitiendo la paleta base
+    si se necesitan más categorías de las disponibles."""
+    veces = (n // len(PALETA_PASTEL)) + 1
+    return (PALETA_PASTEL * veces)[:n]
+
+
+# ------------------------------------------------------------------
+# Estilo global de Matplotlib / Seaborn (fondo, grid, tipografía)
+# ------------------------------------------------------------------
+sns.set_style("whitegrid", {
+    "axes.facecolor": COLOR_FONDO_GRAFICO,
+    "figure.facecolor": COLOR_FONDO_GRAFICO,
+    "grid.color": COLOR_GRID,
+})
+plt.rcParams.update({
+    "figure.facecolor": COLOR_FONDO_GRAFICO,
+    "axes.facecolor": COLOR_FONDO_GRAFICO,
+    "axes.edgecolor": COLOR_BORDE,
+    "axes.labelcolor": COLOR_TEXTO,
+    "axes.titlecolor": COLOR_TEXTO,
+    "xtick.color": COLOR_TEXTO,
+    "ytick.color": COLOR_TEXTO,
+    "text.color": COLOR_TEXTO,
+    "legend.edgecolor": COLOR_BORDE,
+    "font.size": 10,
+})
+
+# ------------------------------------------------------------------
+# CSS pastel para la interfaz (fondo, sidebar, tabs, tarjetas, bordes)
+# El color del slider y del radio del sidebar ya se define de forma
+# nativa en .streamlit/config.toml (primaryColor); este CSS complementa
+# con el fondo degradado, tarjetas de métricas y bordes redondeados.
+# ------------------------------------------------------------------
+st.markdown("""
+<style>
+/* Fondo general de la app: degradado pastel muy sutil */
+.stApp {
+    background: linear-gradient(160deg, #FDF6F0 0%, #F5F2FB 45%, #EEF7F3 100%);
+}
+
+/* Sidebar */
+section[data-testid="stSidebar"] {
+    background-color: #F1ECFA;
+    border-right: 1px solid #D8CFE8;
+}
+section[data-testid="stSidebar"] .stRadio label {
+    font-size: 0.95rem;
+}
+
+/* Títulos */
+h1, h2, h3 {
+    color: #4A4460;
+}
+
+/* Tabs con bordes redondeados y pastel */
+.stTabs [data-baseweb="tab-list"] {
+    gap: 4px;
+}
+.stTabs [data-baseweb="tab"] {
+    background-color: #F6F2FB;
+    border-radius: 10px 10px 0 0;
+    padding: 8px 14px;
+    color: #4A4460;
+}
+.stTabs [aria-selected="true"] {
+    background-color: #E3D9F6 !important;
+    color: #4A4460 !important;
+    font-weight: 600;
+}
+
+/* Tarjetas de métricas */
+div[data-testid="stMetric"] {
+    background-color: #FBF9FF;
+    border: 1px solid #E3D9F6;
+    border-radius: 12px;
+    padding: 12px 10px;
+}
+
+/* Dataframes y tablas */
+div[data-testid="stDataFrame"] {
+    border: 1px solid #E3D9F6;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* Contenedores de mensajes (info/success/warning) con bordes suaves */
+div[data-testid="stAlert"] {
+    border-radius: 10px;
+}
+
+/* File uploader */
+section[data-testid="stFileUploaderDropzone"] {
+    background-color: #FBF9FF;
+    border: 1.5px dashed #C9C2E8;
+    border-radius: 12px;
+}
+</style>
+""", unsafe_allow_html=True)
 
 
 # ====================================================================
@@ -92,7 +211,12 @@ class DataAnalyzer:
             fig, ax = plt.subplots(figsize=(5, 3.5))
         else:
             fig = ax.figure
-        sns.histplot(self.df[columna].dropna(), bins=bins, kde=True, ax=ax, color="#4C72B0")
+        # Barra en celeste pastel, curva KDE en lavanda para contraste suave.
+        sns.histplot(
+            self.df[columna].dropna(), bins=bins, kde=True, ax=ax,
+            color="#A8D8EA", edgecolor="#FDFBF9",
+            line_kws={"color": "#9B7FD4", "linewidth": 2},
+        )
         ax.set_title(f"Distribución de {columna}")
         ax.set_xlabel(columna)
         ax.set_ylabel("Frecuencia")
@@ -101,7 +225,10 @@ class DataAnalyzer:
     def barras_categorica(self, columna: str):
         fig, ax = plt.subplots(figsize=(5, 3.5))
         conteo = self.df[columna].value_counts()
-        sns.barplot(x=conteo.index, y=conteo.values, ax=ax, palette="viridis")
+        sns.barplot(
+            x=conteo.index, y=conteo.values, ax=ax,
+            hue=conteo.index, palette=paleta_pastel(len(conteo)), legend=False,
+        )
         ax.set_title(f"Frecuencia de {columna}")
         ax.set_ylabel("Conteo")
         ax.set_xlabel(columna)
@@ -109,14 +236,29 @@ class DataAnalyzer:
 
     def boxplot_numerico_vs_categorico(self, num_col: str, cat_col: str):
         fig, ax = plt.subplots(figsize=(5.5, 4))
-        sns.boxplot(data=self.df, x=cat_col, y=num_col, ax=ax, palette="Set2")
+        categorias = sorted(self.df[cat_col].dropna().unique().tolist())
+        # Si es la etiqueta binaria depression_label, usamos la paleta
+        # celeste/rosa fija; si no, la paleta pastel genérica.
+        if cat_col == "depression_label":
+            paleta = [PALETA_DEPRESION.get(c, "#C9C2E8") for c in categorias]
+        else:
+            paleta = paleta_pastel(len(categorias))
+        sns.boxplot(
+            data=self.df, x=cat_col, y=num_col, ax=ax,
+            hue=cat_col, palette=paleta, legend=False,
+            boxprops={"edgecolor": "#4A4460"},
+            medianprops={"color": "#4A4460"},
+            whiskerprops={"color": "#4A4460"},
+            capprops={"color": "#4A4460"},
+        )
         ax.set_title(f"{num_col} según {cat_col}")
         return fig
 
     def barras_apiladas_categorico_vs_categorico(self, col_a: str, col_b: str):
         tabla = pd.crosstab(self.df[col_a], self.df[col_b], normalize="index") * 100
+        colores = paleta_pastel(tabla.shape[1])
         fig, ax = plt.subplots(figsize=(6, 4))
-        tabla.plot(kind="bar", stacked=True, ax=ax, colormap="viridis")
+        tabla.plot(kind="bar", stacked=True, ax=ax, color=colores, edgecolor="#FDFBF9")
         ax.set_ylabel("Porcentaje (%)")
         ax.set_title(f"{col_a} vs {col_b} (proporciones)")
         ax.legend(title=col_b, bbox_to_anchor=(1.02, 1), loc="upper left")
@@ -332,7 +474,10 @@ elif modulo == "🔎 Análisis Exploratorio (EDA)":
             )
         else:
             fig, ax = plt.subplots(figsize=(6, 3))
-            sns.barplot(x=resumen_nulos.index, y=resumen_nulos["porcentaje_%"], ax=ax)
+            sns.barplot(
+                x=resumen_nulos.index, y=resumen_nulos["porcentaje_%"], ax=ax,
+                hue=resumen_nulos.index, palette=paleta_pastel(len(resumen_nulos)), legend=False,
+            )
             ax.set_ylabel("% de nulos")
             plt.xticks(rotation=45, ha="right")
             st.pyplot(fig)
@@ -456,7 +601,8 @@ elif modulo == "🔎 Análisis Exploratorio (EDA)":
             fig, ax = plt.subplots(figsize=(6, 4))
             sns.scatterplot(
                 data=df_filtrado, x=var_habito, y=var_bienestar,
-                hue="depression_label", palette="Set1", ax=ax)
+                hue="depression_label", palette=PALETA_DEPRESION,
+                ax=ax, s=55, edgecolor="#FDFBF9", linewidth=0.5)
             ax.set_title(f"{var_bienestar} vs {var_habito} (según filtros aplicados)")
             # Leyenda fuera del área de graficado, al costado derecho,
             # para que no se sobreponga a los puntos del scatterplot.
