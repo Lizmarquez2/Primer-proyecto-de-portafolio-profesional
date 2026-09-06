@@ -28,8 +28,8 @@ La aplicación está organizada en 3 módulos navegables desde el sidebar:
 ### Ejecutar en local
 
 ```bash
-git clone [PEGAR AQUÍ EL LINK DE TU REPOSITORIO GITHUB]
-cd [nombre-del-repositorio]
+git clone (https://github.com/Lizmarquez2/Primer-proyecto-de-portafolio-profesional)
+cd Primer-proyecto-de-portafolio-profesional
 pip install -r requirements.txt
 streamlit run app.py
 ```
