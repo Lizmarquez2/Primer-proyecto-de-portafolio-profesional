@@ -483,21 +483,21 @@ elif modulo == "🔎 Análisis Exploratorio (EDA)":
 
         st.subheader("📌 Conclusiones")
         st.markdown("""
-        1. **Sueño y bienestar:** los adolescentes con `depression_label = 1`
+        1. **Sueño y bienestar:** Los adolescentes con `depression_label = 1`
            muestran, en promedio, menos horas de sueño que quienes tienen
            `depression_label = 0`, lo que sugiere una asociación exploratoria
            entre el descanso y el bienestar reportado, sin implicar causalidad.
-        2. **Uso de redes sociales:** el grupo con etiqueta positiva presenta
+        2. **Uso de redes sociales:** El grupo con etiqueta positiva presenta
            un mayor promedio de horas diarias en redes sociales, patrón
            consistente con lo observado en el análisis bivariado del Ítem 7.
-        3. **Interacción social:** los niveles bajos de interacción social
+        3. **Interacción social:** Los niveles bajos de interacción social
            se asocian, de forma descriptiva, con una mayor proporción de
            `depression_label = 1` frente a los niveles medio y alto.
-        4. **Escalas de estrés y ansiedad:** ambas escalas muestran
+        4. **Escalas de estrés y ansiedad:** Ambas escalas muestran
            distribuciones más desplazadas hacia valores altos en el grupo
            con etiqueta positiva, reforzando la coherencia interna del
            dataset entre variables relacionadas.
-        5. **Plataforma utilizada:** no se observan diferencias marcadas en
+        5. **Plataforma utilizada:** No se observan diferencias marcadas en
            la proporción de `depression_label` entre quienes usan Instagram,
            TikTok o ambas plataformas, lo que sugiere que la plataforma en
            sí misma no sería, en este dataset, un factor diferenciador tan
