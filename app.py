@@ -418,7 +418,7 @@ elif modulo == "🔎 Análisis Exploratorio (EDA)":
     # ---------------- Ítem 9: Análisis basado en parámetros seleccionados ----------------
     with tabs[8]:
         st.header("9️⃣ Análisis dinámico según parámetros seleccionados")
-
+ 
         st.subheader("Filtros")
         c1, c2, c3, c4 = st.columns(4)
         with c1:
@@ -431,15 +431,15 @@ elif modulo == "🔎 Análisis Exploratorio (EDA)":
         with c4:
             interaccion_sel = st.multiselect(
                 "Nivel de interacción social", df["social_interaction_level"].unique().tolist())
-
+ 
         mostrar_tabla = st.checkbox("Mostrar tabla de datos filtrados")
-
+ 
         df_filtrado = analyzer.filtrar(rango_edad, generos_sel, plataformas_sel, interaccion_sel)
         st.caption(f"Registros que cumplen los filtros: **{len(df_filtrado)}**")
-
+ 
         if mostrar_tabla:
             st.dataframe(df_filtrado, use_container_width=True)
-
+ 
         st.markdown("---")
         st.subheader("Comparación dinámica de variables")
         colv1, colv2 = st.columns(2)
@@ -450,7 +450,7 @@ elif modulo == "🔎 Análisis Exploratorio (EDA)":
             var_habito = st.selectbox(
                 "Variable de hábito digital",
                 ["daily_social_media_hours", "screen_time_before_sleep", "sleep_hours"])
-
+ 
         if len(df_filtrado) > 0:
             analyzer_filtrado = DataAnalyzer(df_filtrado)
             fig, ax = plt.subplots(figsize=(6, 4))
@@ -458,6 +458,10 @@ elif modulo == "🔎 Análisis Exploratorio (EDA)":
                 data=df_filtrado, x=var_habito, y=var_bienestar,
                 hue="depression_label", palette="Set1", ax=ax)
             ax.set_title(f"{var_bienestar} vs {var_habito} (según filtros aplicados)")
+            # Leyenda fuera del área de graficado, al costado derecho,
+            # para que no se sobreponga a los puntos del scatterplot.
+            ax.legend(title="depression_label", bbox_to_anchor=(1.02, 1), loc="upper left")
+            fig.tight_layout()
             st.pyplot(fig)
         else:
             st.warning("No hay registros que cumplan con los filtros seleccionados.")
